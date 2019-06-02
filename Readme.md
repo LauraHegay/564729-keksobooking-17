@@ -1,7 +1,8 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Лаура Хегай](https://up.htmlacademy.ru/javascript/17/user/564729).
-* Наставник: `Неизвестно`.
+* Наставник: [Константин
+Цуканов](https://htmlacademy.ru/profile/id769011).
 
 ---
 
