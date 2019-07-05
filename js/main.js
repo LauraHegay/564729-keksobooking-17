@@ -1,68 +1,54 @@
 'use strict';
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
-
+var similarAnnoucementTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 // Получение случайного числа
 var getRandomNumber = function (minNum, maxNum) {
   return Math.floor(Math.random() * (maxNum - minNum)) + minNum;
 };
-
-var announcements = [
-  {
+// Создает очередной случайный объект для массива.
+var createRundomObject = function () {
+  var OFFER_TYPE = ['palace', 'flat', 'house', 'bungalo'];
+  var data = {
     author: {
-      avatar: 'img/avatars/user01.png'
+      avatar: 'img/avatars/user' + '0' + getRandomNumber(1, 8) + '.png'
     },
     offer: {
-      type: 'palace' // palace, flat, house или bungalo
+      type: OFFER_TYPE[getRandomNumber(0, 3)]
     },
     location: {
       x: getRandomNumber(125, 1200) - PIN_WIDTH / 2 + 'px',
       y: getRandomNumber(130, 630) - PIN_HEIGHT + 'px'
     }
-  },
-  {
-    author: {
-      avatar: 'img/avatars/user02.png'
-    },
-    offer: {
-      type: 'flat' // palace, flat, house или bungalo
-    },
-    location: {
-      x: getRandomNumber(125, 1200) - PIN_WIDTH / 2 + 'px',
-      y: getRandomNumber(130, 630) - PIN_HEIGHT + 'px'
-    }
-  },
-  {
-    author: {
-      avatar: 'img/avatars/user03.png'
-    },
-    // offer: {
-    //   type: 'palace' //palace, flat, house или bungalo
-    // },
-    location: {
-      x: getRandomNumber(125, 1200) - PIN_WIDTH / 2 + 'px',
-      y: getRandomNumber(130, 630) - PIN_HEIGHT + 'px'
-    }
+  };
+  return data;
+}
+// Создает массив из N элементов с этими случайными значениями внутри.
+var createArray = function () {
+  var announcements = [];
+  for (var i = 0; i < 8; i++) {
+    announcements[i] = createRundomObject();
   }
-];
+  return announcements;
+}
+
+var announcements = createArray();
 
 // функцию создания DOM-элемента на основе JS-объекта,
-var createSimilarAnnoucements = function () {
-  var similarAnnoucementTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-  return similarAnnoucementTemplate;
+var createSimilarAnnoucements = function (template) {
+  return template.cloneNode(true);
 };
 // функцию заполнения блока DOM-элементами на основе массива JS-объектов.
-var fillSimilarAnnoucements = function (element, data) {
+var fillSimilarAnnoucements = function (data) {
   var similarListElement = document.querySelector('.map__pins');
   for (var i = 0; i < data.length; i++) {
-    var AnnoucementElement = element.cloneNode(true);
-    AnnoucementElement.querySelector('img').src = data[i].author.avatar;
-    AnnoucementElement.style.top = data[i].location.y;
-    AnnoucementElement.style.left = data[i].location.x;
-    similarListElement.appendChild(AnnoucementElement);
+    var annoucementElement = createSimilarAnnoucements(similarAnnoucementTemplate);
+    annoucementElement.querySelector('img').src = data[i].author.avatar;
+    annoucementElement.style.top = data[i].location.y;
+    annoucementElement.style.left = data[i].location.x;
+    similarListElement.appendChild(annoucementElement);
   }
 };
 
-var element = createSimilarAnnoucements();
-fillSimilarAnnoucements(element, announcements);
+fillSimilarAnnoucements(announcements);
 
