@@ -22,7 +22,7 @@ var createRundomObject = function () {
     }
   };
   return data;
-}
+};
 // Создает массив из N элементов с этими случайными значениями внутри.
 var createArray = function () {
   var announcements = [];
@@ -30,7 +30,7 @@ var createArray = function () {
     announcements[i] = createRundomObject();
   }
   return announcements;
-}
+};
 
 var announcements = createArray();
 
@@ -41,13 +41,15 @@ var createSimilarAnnoucements = function (template) {
 // функцию заполнения блока DOM-элементами на основе массива JS-объектов.
 var fillSimilarAnnoucements = function (data) {
   var similarListElement = document.querySelector('.map__pins');
+  var annoucementAllElement = document.createDocumentFragment();
   for (var i = 0; i < data.length; i++) {
     var annoucementElement = createSimilarAnnoucements(similarAnnoucementTemplate);
     annoucementElement.querySelector('img').src = data[i].author.avatar;
     annoucementElement.style.top = data[i].location.y;
     annoucementElement.style.left = data[i].location.x;
-    similarListElement.appendChild(annoucementElement);
+    annoucementAllElement.appendChild(annoucementElement);
   }
+  similarListElement.appendChild(annoucementAllElement);
 };
 
 fillSimilarAnnoucements(announcements);
