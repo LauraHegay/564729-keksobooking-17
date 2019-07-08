@@ -17,8 +17,8 @@ var createRundomObject = function () {
       type: OFFER_TYPE[getRandomNumber(0, 3)]
     },
     location: {
-      x: getRandomNumber(125, 1200) - PIN_WIDTH / 2 + 'px',
-      y: getRandomNumber(130, 630) - PIN_HEIGHT + 'px'
+      x: getRandomNumber(125, 1200),
+      y: getRandomNumber(130, 630)
     }
   };
   return data;
@@ -45,8 +45,8 @@ var fillSimilarAnnoucements = function (data) {
   for (var i = 0; i < data.length; i++) {
     var annoucementElement = createSimilarAnnoucements(similarAnnoucementTemplate);
     annoucementElement.querySelector('img').src = data[i].author.avatar;
-    annoucementElement.style.top = data[i].location.y;
-    annoucementElement.style.left = data[i].location.x;
+    annoucementElement.style.top = data[i].location.y - PIN_WIDTH / 2 + 'px';
+    annoucementElement.style.left = data[i].location.x - PIN_HEIGHT + 'px';
     annoucementAllElement.appendChild(annoucementElement);
   }
   similarListElement.appendChild(annoucementAllElement);
