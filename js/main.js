@@ -45,8 +45,8 @@ var fillSimilarAnnoucements = function (data) {
   for (var i = 0; i < data.length; i++) {
     var annoucementElement = createSimilarAnnoucements(similarAnnoucementTemplate);
     annoucementElement.querySelector('img').src = data[i].author.avatar;
-    annoucementElement.style.top = data[i].location.y - PIN_WIDTH / 2 + 'px';
-    annoucementElement.style.left = data[i].location.x - PIN_HEIGHT + 'px';
+    annoucementElement.style.top = data[i].location.y - PIN_HEIGHT + 'px';
+    annoucementElement.style.left = data[i].location.x - PIN_WIDTH / 2 + 'px';
     annoucementAllElement.appendChild(annoucementElement);
   }
   similarListElement.appendChild(annoucementAllElement);
