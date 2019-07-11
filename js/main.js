@@ -52,5 +52,34 @@ var fillSimilarAnnoucements = function (data) {
   similarListElement.appendChild(annoucementAllElement);
 };
 
-fillSimilarAnnoucements(announcements);
+// fillSimilarAnnoucements(announcements);
+var pin = document.querySelector('.map__pin--main');
+var onPinButtonClick = function () {
+  var map = document.querySelector('.map');
+  var form = document.querySelector('.ad-form');
+  var formFilters = document.querySelector('.map__filters');
+  var inputs = form.querySelectorAll('input');
+  var fieldsets = form.querySelectorAll('fieldset');
+  var selects = form.querySelectorAll('select');
+  map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
+  formFilters.classList.remove('map__filters--disabled');
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].disabled = false;
+  }
+  for (var j = 0; j < fieldsets.length; j++) {
+    fieldsets[j].disabled = false;
+  }
+  for (var k = 0; k < selects.length; k++) {
+    selects[k].disabled = false;
+  }
+};
+var onPinButtonMouseup = function () {
+  var pinTop = pin.style.top.slice(0, -2);
+  var pinLeft = pin.style.left.slice(0, -2);
+  var form = document.querySelector('.ad-form');
+  form.querySelector('#address').value = pinTop + ', ' + pinLeft;
+};
 
+pin.addEventListener('click', onPinButtonClick);
+pin.addEventListener('mouseup', onPinButtonMouseup);
