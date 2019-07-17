@@ -53,32 +53,53 @@ var fillSimilarAnnoucements = function (data) {
 };
 
 // fillSimilarAnnoucements(announcements);
+
+// функция для изменения состояния (заблокирован или не заблокирован) элементов формы.
+var setElementsCondition = function (elements, conditionElements) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].disabled = conditionElements;
+  }
+};
+
 var pin = document.querySelector('.map__pin--main');
-var onPinButtonClick = function () {
+var form = document.querySelector('.ad-form');
+var inputs = form.querySelectorAll('input');
+var fieldsets = form.querySelectorAll('fieldset');
+var selects = form.querySelectorAll('select');
+
+var setAddres = function (blocked) {
+  var pinTop = pin.offsetTop;
+  var pinLeft = pin.offsetLeft;
+  var RADIUS_PIN = pin.offsetWidth;
+  var pinTipHeight = blocked ? 0 : 22;
+  var x = pinLeft + Math.floor(RADIUS_PIN / 2);
+  var y = pinTop + Math.floor(RADIUS_PIN / 2) + pinTipHeight;
+  form.querySelector('#address').value = x + ', ' + y;
+};
+var setNonactiveMode = function () {
+  setElementsCondition(inputs, true);
+  setElementsCondition(fieldsets, true);
+  setElementsCondition(selects, true);
+  setAddres(true);
+};
+var setActiveMode = function () {
   var map = document.querySelector('.map');
-  var form = document.querySelector('.ad-form');
   var formFilters = document.querySelector('.map__filters');
-  var inputs = form.querySelectorAll('input');
-  var fieldsets = form.querySelectorAll('fieldset');
-  var selects = form.querySelectorAll('select');
   map.classList.remove('map--faded');
   form.classList.remove('ad-form--disabled');
   formFilters.classList.remove('map__filters--disabled');
-  for (var i = 0; i < inputs.length; i++) {
-    inputs[i].disabled = false;
-  }
-  for (var j = 0; j < fieldsets.length; j++) {
-    fieldsets[j].disabled = false;
-  }
-  for (var k = 0; k < selects.length; k++) {
-    selects[k].disabled = false;
-  }
+  setElementsCondition(inputs, false);
+  setElementsCondition(fieldsets, false);
+  setElementsCondition(selects, false);
 };
+setNonactiveMode();
+
+var onPinButtonClick = function () {
+  setActiveMode();
+};
+
 var onPinButtonMouseup = function () {
-  var pinTop = pin.style.top.slice(0, -2);
-  var pinLeft = pin.style.left.slice(0, -2);
-  var form = document.querySelector('.ad-form');
-  form.querySelector('#address').value = pinTop + ', ' + pinLeft;
+  setAddres(false);
 };
 
 pin.addEventListener('click', onPinButtonClick);
