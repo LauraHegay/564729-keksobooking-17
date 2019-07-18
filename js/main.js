@@ -52,5 +52,58 @@ var fillSimilarAnnoucements = function (data) {
   similarListElement.appendChild(annoucementAllElement);
 };
 
-fillSimilarAnnoucements(announcements);
+// функция для изменения состояния (заблокирован или не заблокирован) элементов формы.
+var setElementsCondition = function (elements, conditionElements) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].disabled = conditionElements;
+  }
+};
 
+var pin = document.querySelector('.map__pin--main');
+var formAnnoucement = document.querySelector('.ad-form');
+var formFilter = document.querySelector('.map__filters');
+var inputs = formAnnoucement.querySelectorAll('input');
+var fieldsets = formAnnoucement.querySelectorAll('fieldset');
+var selects = formAnnoucement.querySelectorAll('select');
+var selectsFilter = formFilter.querySelectorAll('select');
+
+var setAddres = function (blocked) {
+  var pinTop = pin.offsetTop;
+  var pinLeft = pin.offsetLeft;
+  var RADIUS_PIN = pin.offsetWidth;
+  var pinTipHeight = blocked ? 0 : 22;
+  var x = pinLeft + Math.floor(RADIUS_PIN / 2);
+  var y = pinTop + Math.floor(RADIUS_PIN / 2) + pinTipHeight;
+  formAnnoucement.querySelector('#address').value = x + ', ' + y;
+};
+var setNonactiveMode = function () {
+  setElementsCondition(inputs, true);
+  setElementsCondition(fieldsets, true);
+  setElementsCondition(selects, true);
+  setElementsCondition(selectsFilter, true);
+  setAddres(true);
+};
+var setActiveMode = function () {
+  var map = document.querySelector('.map');
+  var formFilters = document.querySelector('.map__filters');
+  map.classList.remove('map--faded');
+  formAnnoucement.classList.remove('ad-form--disabled');
+  formFilters.classList.remove('map__filters--disabled');
+  setElementsCondition(inputs, false);
+  setElementsCondition(fieldsets, false);
+  setElementsCondition(selects, false);
+  setElementsCondition(selectsFilter, false);
+  fillSimilarAnnoucements(announcements);
+};
+setNonactiveMode();
+
+var onPinButtonClick = function () {
+  setActiveMode();
+};
+
+var onPinButtonMouseup = function () {
+  setAddres(false);
+};
+
+pin.addEventListener('click', onPinButtonClick);
+pin.addEventListener('mouseup', onPinButtonMouseup);
