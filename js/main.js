@@ -67,56 +67,6 @@ var fieldsets = formAnnoucement.querySelectorAll('fieldset');
 var selects = formAnnoucement.querySelectorAll('select');
 var selectsFilter = formFilter.querySelectorAll('select');
 
-
-// Синхронизация заполнения полей "Количество комнат" и "Количество гостей"
-var selectRoom = formAnnoucement.querySelector('#room_number');
-var selectCapacity = formAnnoucement.querySelector('#capacity');
-var setSynchronizeRoom = function () {
-  var currentSelectValue = selectRoom.value;
-  if (currentSelectValue === '100') {
-    for (var i = 0; i < selectCapacity.length; i++) {
-      selectCapacity.options[i].disabled = true;
-    }
-    selectCapacity.options[selectCapacity.length - 1].disabled = false;
-    selectCapacity.options[selectCapacity.length - 1].selected = true;
-  } else {
-    for (i = 0; i < selectCapacity.length - 1; i++) {
-      if (i < currentSelectValue) {
-        selectCapacity.options[selectCapacity.length - 2 - i].disabled = false;
-        selectCapacity.options[selectCapacity.length - 2 - i].selected = true;
-      } else {
-        selectCapacity.options[selectCapacity.length - 2 - i].disabled = true;
-      }
-    }
-    selectCapacity.options[3].disabled = true;
-  }
-};
-// Синхронизация заполнения полей "Время заезда" и "Время выезда"
-var selectTimein = formAnnoucement.querySelector('#timein');
-var selectTimeout = formAnnoucement.querySelector('#timeout');
-var setSynchronizeTimein = function () {
-  var currentSelectValue = selectTimein.value;
-  for (var i = 0; i < selectTimein.length; i++) {
-    if (currentSelectValue === selectTimeout.options[i].value) {
-      selectTimeout.options[i].disabled = false;
-      selectTimeout.options[i].selected = true;
-    } else {
-      selectTimeout.options[i].disabled = true;
-    }
-  }
-};
-
-
-var onFormSelectRoomChange = function () {
-  setSynchronizeRoom();
-};
-
-var onFormSelectTimeinChange = function () {
-  setSynchronizeTimein();
-};
-selectRoom.addEventListener('change', onFormSelectRoomChange);
-selectTimein.addEventListener('change', onFormSelectTimeinChange);
-
 var setAddres = function (blocked) {
   var pinTop = pin.offsetTop;
   var pinLeft = pin.offsetLeft;
@@ -144,8 +94,6 @@ var setActiveMode = function () {
   setElementsCondition(selects, false);
   setElementsCondition(selectsFilter, false);
   fillSimilarAnnoucements(announcements);
-  setSynchronizeRoom();
-  setSynchronizeTimein();
 };
 setNonactiveMode();
 
@@ -159,3 +107,63 @@ var onPinButtonMouseup = function () {
 
 pin.addEventListener('click', onPinButtonClick);
 pin.addEventListener('mouseup', onPinButtonMouseup);
+
+// Синхронизация заполнения полей "Время заезда" и "Время выезда"
+var selectTimein = formAnnoucement.querySelector('#timein');
+var selectTimeout = formAnnoucement.querySelector('#timeout');
+
+var onSelectChange = function (evt) {
+  var secondSelect = evt.target === selectTimein ? selectTimeout : selectTimein;
+  secondSelect.value = evt.target.value;
+};
+
+selectTimein.addEventListener('change', onSelectChange);
+selectTimeout.addEventListener('change', onSelectChange);
+
+// Синхронизация заполнения полей "Количество комнат" и "Количество гостей"
+var selectRooms = formAnnoucement.querySelector('#room_number');
+var selectCapacity = formAnnoucement.querySelector('#capacity');
+
+var updateGuestsSelect = function (count) {
+  var options = selectCapacity.querySelectorAll('option');
+
+  options.forEach(function (elem) {
+    var value = parseInt(elem.value, 10);
+    var isZero = value === 0;
+    elem.disabled = count === 100 ? !isZero : value > count || isZero;
+    elem.selected = !elem.disabled;
+  });
+};
+
+var onFormSelectRoomChange = function (evt) {
+  updateGuestsSelect(parseInt(evt.target.value, 10));
+};
+selectRooms.addEventListener('change', onFormSelectRoomChange);
+
+var selectType = formAnnoucement.querySelector('#type');
+var inputPrice = formAnnoucement.querySelector('#price');
+
+var updateTypeSelect = function (type) {
+  switch (type) {
+    case 'bungalo':
+      inputPrice.setAttribute('placeholder', '0');
+      inputPrice.setAttribute('min', '0');
+      break;
+    case 'flat':
+      inputPrice.setAttribute('placeholder', '1000');
+      inputPrice.setAttribute('min', '1000');
+      break;
+    case 'house':
+      inputPrice.setAttribute('placeholder', '5000');
+      inputPrice.setAttribute('min', '5000');
+      break;
+    default:
+      inputPrice.setAttribute('placeholder', '10000');
+      inputPrice.setAttribute('min', '10000');
+  }
+};
+
+var onFormSelectTypeChange = function (evt) {
+  updateTypeSelect(evt.target.value);
+};
+selectType.addEventListener('change', onFormSelectTypeChange);
