@@ -142,27 +142,17 @@ selectRooms.addEventListener('change', onFormSelectRoomChange);
 
 var selectType = formAnnoucement.querySelector('#type');
 var inputPrice = formAnnoucement.querySelector('#price');
-
-var updateTypeSelect = function (type) {
-  switch (type) {
-    case 'bungalo':
-      inputPrice.setAttribute('placeholder', '0');
-      inputPrice.setAttribute('min', '0');
-      break;
-    case 'flat':
-      inputPrice.setAttribute('placeholder', '1000');
-      inputPrice.setAttribute('min', '1000');
-      break;
-    case 'house':
-      inputPrice.setAttribute('placeholder', '5000');
-      inputPrice.setAttribute('min', '5000');
-      break;
-    default:
-      inputPrice.setAttribute('placeholder', '10000');
-      inputPrice.setAttribute('min', '10000');
-  }
+var minPriceMap = {
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalo: 0
 };
-
+var updateTypeSelect = function (type) {
+  var min = minPriceMap[type];
+  inputPrice.min = min;
+  inputPrice.placeholder = min;
+};
 var onFormSelectTypeChange = function (evt) {
   updateTypeSelect(evt.target.value);
 };
