@@ -107,3 +107,53 @@ var onPinButtonMouseup = function () {
 
 pin.addEventListener('click', onPinButtonClick);
 pin.addEventListener('mouseup', onPinButtonMouseup);
+
+// Синхронизация заполнения полей "Время заезда" и "Время выезда"
+var selectTimein = formAnnoucement.querySelector('#timein');
+var selectTimeout = formAnnoucement.querySelector('#timeout');
+
+var onSelectChange = function (evt) {
+  var secondSelect = evt.target === selectTimein ? selectTimeout : selectTimein;
+  secondSelect.value = evt.target.value;
+};
+
+selectTimein.addEventListener('change', onSelectChange);
+selectTimeout.addEventListener('change', onSelectChange);
+
+// Синхронизация заполнения полей "Количество комнат" и "Количество гостей"
+var selectRooms = formAnnoucement.querySelector('#room_number');
+var selectCapacity = formAnnoucement.querySelector('#capacity');
+
+var updateGuestsSelect = function (count) {
+  var options = selectCapacity.querySelectorAll('option');
+
+  options.forEach(function (elem) {
+    var value = parseInt(elem.value, 10);
+    var isZero = value === 0;
+    elem.disabled = count === 100 ? !isZero : value > count || isZero;
+    elem.selected = !elem.disabled;
+  });
+};
+
+var onFormSelectRoomChange = function (evt) {
+  updateGuestsSelect(parseInt(evt.target.value, 10));
+};
+selectRooms.addEventListener('change', onFormSelectRoomChange);
+
+var selectType = formAnnoucement.querySelector('#type');
+var inputPrice = formAnnoucement.querySelector('#price');
+var minPriceMap = {
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalo: 0
+};
+var updateTypeSelect = function (type) {
+  var min = minPriceMap[type];
+  inputPrice.min = min;
+  inputPrice.placeholder = min;
+};
+var onFormSelectTypeChange = function (evt) {
+  updateTypeSelect(evt.target.value);
+};
+selectType.addEventListener('change', onFormSelectTypeChange);
