@@ -97,15 +97,10 @@ var setActiveMode = function () {
 };
 setNonactiveMode();
 
-var onPinButtonClick = function () {
-  setActiveMode();
-};
-
 var onPinButtonMouseup = function () {
   setAddres(false);
 };
 
-pin.addEventListener('click', onPinButtonClick);
 pin.addEventListener('mouseup', onPinButtonMouseup);
 
 // Синхронизация заполнения полей "Время заезда" и "Время выезда"
@@ -157,3 +152,48 @@ var onFormSelectTypeChange = function (evt) {
   updateTypeSelect(evt.target.value);
 };
 selectType.addEventListener('change', onFormSelectTypeChange);
+
+// Перетаскивание пина по карте
+pin.addEventListener('mousedown', function (evt) {
+  var TOP_BORDER_AREA = 100;
+  var BOTTOM_BORDER_AREA = 630;
+  var LEFT_BORDER_AREA = 0;
+  var RIGHT_BORDER_AREA = 1135;
+  evt.preventDefault();
+  setActiveMode();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    if ((pin.offsetTop - shift.y) >= TOP_BORDER_AREA && (pin.offsetTop - shift.y) <= BOTTOM_BORDER_AREA) {
+      pin.style.top = (pin.offsetTop - shift.y) + 'px';
+    }
+    if ((pin.offsetLeft - shift.x) >= LEFT_BORDER_AREA && (pin.offsetLeft - shift.x) <= RIGHT_BORDER_AREA) {
+      pin.style.left = (pin.offsetLeft - shift.x) + 'px';
+    }
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
