@@ -168,7 +168,15 @@ pin.addEventListener('mousedown', function (evt) {
 
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
-
+    var getCoord = function (shift, offset, min, max) {
+      var coord = (offset - shift);
+      if (coord < min) {
+        coord = min;
+      } else if (coord > max) {
+        coord = max;
+      }
+      return coord;
+    };
     var shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY
@@ -178,13 +186,8 @@ pin.addEventListener('mousedown', function (evt) {
       x: moveEvt.clientX,
       y: moveEvt.clientY
     };
-
-    if ((pin.offsetTop - shift.y) >= TOP_BORDER_AREA && (pin.offsetTop - shift.y) <= BOTTOM_BORDER_AREA) {
-      pin.style.top = (pin.offsetTop - shift.y) + 'px';
-    }
-    if ((pin.offsetLeft - shift.x) >= LEFT_BORDER_AREA && (pin.offsetLeft - shift.x) <= RIGHT_BORDER_AREA) {
-      pin.style.left = (pin.offsetLeft - shift.x) + 'px';
-    }
+    pin.style.top = getCoord(shift.y, pin.offsetTop, TOP_BORDER_AREA, BOTTOM_BORDER_AREA) + 'px';
+    pin.style.left = getCoord(shift.x, pin.offsetLeft, LEFT_BORDER_AREA, RIGHT_BORDER_AREA) + 'px';
   };
 
   var onMouseUp = function (upEvt) {
