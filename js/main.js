@@ -155,28 +155,28 @@ selectType.addEventListener('change', onFormSelectTypeChange);
 
 // Перетаскивание пина по карте
 pin.addEventListener('mousedown', function (evt) {
-  var TOP_BORDER_AREA = 100;
+  var TOP_BORDER_AREA = 80;
   var BOTTOM_BORDER_AREA = 630;
-  var LEFT_BORDER_AREA = 0;
-  var RIGHT_BORDER_AREA = 1135;
+  var LEFT_BORDER_AREA = -31;
+  var RIGHT_BORDER_AREA = 1166;
   evt.preventDefault();
   setActiveMode();
   var startCoords = {
     x: evt.clientX,
     y: evt.clientY
   };
-
+  var getCoord = function (shift, offset, min, max) {
+    var coord = (offset - shift);
+    if (coord < min) {
+      return min;
+    }
+    if (coord > max) {
+      return max;
+    }
+    return coord;
+  };
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
-    var getCoord = function (shift, offset, min, max) {
-      var coord = (offset - shift);
-      if (coord < min) {
-        coord = min;
-      } else if (coord > max) {
-        coord = max;
-      }
-      return coord;
-    };
     var shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY
@@ -188,6 +188,7 @@ pin.addEventListener('mousedown', function (evt) {
     };
     pin.style.top = getCoord(shift.y, pin.offsetTop, TOP_BORDER_AREA, BOTTOM_BORDER_AREA) + 'px';
     pin.style.left = getCoord(shift.x, pin.offsetLeft, LEFT_BORDER_AREA, RIGHT_BORDER_AREA) + 'px';
+    setAddres(false);
   };
 
   var onMouseUp = function (upEvt) {
