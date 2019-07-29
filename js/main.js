@@ -73,7 +73,7 @@ var setAddres = function (blocked) {
   var RADIUS_PIN = pin.offsetWidth;
   var pinTipHeight = blocked ? 0 : 22;
   var x = pinLeft + Math.floor(RADIUS_PIN / 2);
-  var y = pinTop + Math.floor(RADIUS_PIN / 2) + pinTipHeight;
+  var y = pinTop + RADIUS_PIN + pinTipHeight;
   formAnnoucement.querySelector('#address').value = x + ', ' + y;
 };
 var setNonactiveMode = function () {
@@ -97,15 +97,10 @@ var setActiveMode = function () {
 };
 setNonactiveMode();
 
-var onPinButtonClick = function () {
-  setActiveMode();
-};
-
 var onPinButtonMouseup = function () {
   setAddres(false);
 };
 
-pin.addEventListener('click', onPinButtonClick);
 pin.addEventListener('mouseup', onPinButtonMouseup);
 
 // Синхронизация заполнения полей "Время заезда" и "Время выезда"
@@ -157,3 +152,52 @@ var onFormSelectTypeChange = function (evt) {
   updateTypeSelect(evt.target.value);
 };
 selectType.addEventListener('change', onFormSelectTypeChange);
+
+// Перетаскивание пина по карте
+pin.addEventListener('mousedown', function (evt) {
+  var TOP_BORDER_AREA = 43;
+  var BOTTOM_BORDER_AREA = 543;
+  var LEFT_BORDER_AREA = -32;
+  var RIGHT_BORDER_AREA = 1166;
+  evt.preventDefault();
+  setActiveMode();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+  var getCoord = function (shift, offset, min, max) {
+    var coord = (offset - shift);
+    if (coord < min) {
+      return min;
+    }
+    if (coord > max) {
+      return max;
+    }
+    return coord;
+  };
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+    pin.style.top = getCoord(shift.y, pin.offsetTop, TOP_BORDER_AREA, BOTTOM_BORDER_AREA) + 'px';
+    pin.style.left = getCoord(shift.x, pin.offsetLeft, LEFT_BORDER_AREA, RIGHT_BORDER_AREA) + 'px';
+    setAddres(false);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
