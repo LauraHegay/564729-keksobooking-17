@@ -73,7 +73,7 @@ var setAddres = function (blocked) {
   var RADIUS_PIN = pin.offsetWidth;
   var pinTipHeight = blocked ? 0 : 22;
   var x = pinLeft + Math.floor(RADIUS_PIN / 2);
-  var y = pinTop + Math.floor(RADIUS_PIN / 2) + pinTipHeight;
+  var y = pinTop + RADIUS_PIN + pinTipHeight;
   formAnnoucement.querySelector('#address').value = x + ', ' + y;
 };
 var setNonactiveMode = function () {
@@ -155,9 +155,9 @@ selectType.addEventListener('change', onFormSelectTypeChange);
 
 // Перетаскивание пина по карте
 pin.addEventListener('mousedown', function (evt) {
-  var TOP_BORDER_AREA = 80;
-  var BOTTOM_BORDER_AREA = 630;
-  var LEFT_BORDER_AREA = -31;
+  var TOP_BORDER_AREA = 43;
+  var BOTTOM_BORDER_AREA = 543;
+  var LEFT_BORDER_AREA = -32;
   var RIGHT_BORDER_AREA = 1166;
   evt.preventDefault();
   setActiveMode();
