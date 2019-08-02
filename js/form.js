@@ -5,7 +5,6 @@
   var formFilter = document.querySelector('.map__filters');
   var formAnnoucement = document.querySelector('.ad-form');
   var pin = document.querySelector('.map__pin--main');
-  var announcements = window.data.createArray();
   var inputs = formAnnoucement.querySelectorAll('input');
   var fieldsets = formAnnoucement.querySelectorAll('fieldset');
   var selects = formAnnoucement.querySelectorAll('select');
@@ -92,7 +91,10 @@
       setElementsCondition(fieldsets, false);
       setElementsCondition(selects, false);
       setElementsCondition(selectsFilter, false);
-      window.map.fillSimilarAnnoucements(announcements);
+
+      window.load(function (data) {
+        window.map.fillSimilarAnnoucements(data);
+      });
     }
   };
 
