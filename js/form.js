@@ -21,6 +21,10 @@
     house: 5000,
     bungalo: 0
   };
+  // var offers = [];
+  // window.load(function (data) {
+  //   offers = data.slice();
+  // });
 
   // функция для изменения состояния (заблокирован или не заблокирован) элементов формы.
   var setElementsCondition = function (elements, conditionElements) {
@@ -91,10 +95,7 @@
       setElementsCondition(fieldsets, false);
       setElementsCondition(selects, false);
       setElementsCondition(selectsFilter, false);
-
-      window.load(function (data) {
-        window.map.fillSimilarAnnoucements(data);
-      });
+      window.map.fillSimilarAnnoucements(window.map.getPins());
     }
   };
 
