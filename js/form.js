@@ -95,10 +95,9 @@
       setElementsCondition(fieldsets, false);
       setElementsCondition(selects, false);
       setElementsCondition(selectsFilter, false);
-      window.map.fillSimilarAnnoucements(window.map.getPins());
+      window.map.addAds();
     }
   };
 
   window.form.setNonactiveMode();
 })();
-
