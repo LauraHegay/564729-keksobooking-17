@@ -57,5 +57,7 @@
     return cardElement;
   };
 
-  window.createCard = createCard;
+  window.card = {
+    createCard: createCard
+  };
 })();
