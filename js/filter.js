@@ -84,5 +84,5 @@
     window.map.renderAds(adsToRender);
   };
 
-  formFilter.addEventListener('change', window.debounce(onFilterFormChanged));
+  formFilter.addEventListener('change', window.common.debounce(onFilterFormChanged));
 })();
