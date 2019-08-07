@@ -67,8 +67,7 @@
     });
     return adsToRender;
   };
-
-  formFilter.addEventListener('change', function (evt) {
+  var onFilterFormChanged = function (evt) {
     var name = evt.target.name;
     var value = evt.target.value;
 
@@ -83,5 +82,7 @@
 
     var adsToRender = filter(window.map.getAds());
     window.map.renderAds(adsToRender);
-  });
+  };
+
+  formFilter.addEventListener('change', window.debounce(onFilterFormChanged));
 })();

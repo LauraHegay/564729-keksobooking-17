@@ -21,10 +21,10 @@
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
-    xhr.addEventListener('error', function () {
+    xhr.addEventListener('error', function () { // Обрабатываем событие error
       onError('Произошла ошибка соединения');
     });
-    xhr.addEventListener('timeout', function () {
+    xhr.addEventListener('timeout', function () { // Обрабатываем событие timeout
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
