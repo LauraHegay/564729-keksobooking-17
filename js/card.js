@@ -2,32 +2,41 @@
 // функционал заполнения и отображения карточки
 (function () {
   var translateOfferType = {
-    'flat': 'Квартира',
-    'bungalo': 'Бунгало',
-    'house': 'Дом',
-    'palace': 'Дворец'
+    flat: 'Квартира',
+    bungalo: 'Бунгало',
+    house: 'Дом',
+    palace: 'Дворец'
   };
 
   var similarCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var getOfferFeatures = function (features, element) {
-    element.querySelector('.popup__features').innerHTML = '';
-    for (var j = 0; j < features.length; j++) {
+    var similarListFeatures = document.querySelector('.popup__features');
+    element.querySelector('.popup__features').textContent = '';
+    var featuresAllElement = document.createDocumentFragment();
+    features.forEach(function (feature) {
       var elementLi = document.createElement('li');
-      elementLi.setAttribute('class', ('popup__feature popup__feature--' + features[j]));
-      element.querySelector('.popup__features').appendChild(elementLi);
-    }
+      elementLi.classList.add('popup__feature popup__feature--' + feature);
+      featuresAllElement.appendChild(elementLi);
+    });
+    similarListFeatures.appendChild(featuresAllElement);
+  };
+  var createImg = function (path) {
+    var elementImg = document.createElement('img');
+    elementImg.classList.add('popup__photo');
+    elementImg.src = path;
+    elementImg.width = 45;
+    elementImg.height = 40;
   };
   var getOfferPhotos = function (photos, element) {
-    element.querySelector('.popup__photos').innerHTML = '';
-    for (var i = 0; i < photos.length; i++) {
-      var elementImg = document.createElement('img');
-      elementImg.setAttribute('class', 'popup__photo');
-      elementImg.setAttribute('src', photos[i]);
-      elementImg.setAttribute('width', 45);
-      elementImg.setAttribute('height', 40);
-      element.querySelector('.popup__photos').appendChild(elementImg);
-      element.querySelector('.popup__photos').querySelector('img').src = photos[i];
-    }
+    var similarListPhotos = document.querySelector('.popup__photos');
+    var photosAllElement = document.createDocumentFragment();
+    element.querySelector('.popup__photos').textContent = '';
+    photos.forEach(function (photo) {
+      var img = createImg(photo);
+      photosAllElement.appendChild(img);
+      photosAllElement.querySelector('img').src = photo; // не уверена, что эта строка будет работать
+    });
+    similarListPhotos.appendChild(photosAllElement);
   };
   var createCard = function (card) {
     var cardElement = similarCardTemplate.cloneNode(true);

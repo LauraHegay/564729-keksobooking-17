@@ -167,7 +167,6 @@
     }
   };
   window.map = {
-    // функция заполнения блока DOM-элементами на основе массива JS-объектов.
     addAds: addAds,
     renderAds: renderAds,
     getAds: getAds,
