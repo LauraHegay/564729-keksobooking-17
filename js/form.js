@@ -68,6 +68,10 @@
   };
   selectType.addEventListener('change', onFormSelectTypeChange);
 
+  formAnnoucement.addEventListener('submit', function (evt) {
+    window.backend.upload(new FormData(formAnnoucement), window.map.onSuccess, window.map.onError);
+    evt.preventDefault();
+  });
   window.form = {
     setAddres: function (blocked) {
       var pinTop = pin.offsetTop;

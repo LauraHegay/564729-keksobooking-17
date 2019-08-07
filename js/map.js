@@ -42,6 +42,30 @@
     return template;
   };
 
+  var onSuccess = function () {
+    var successContainer = document.querySelector('main');
+    var successTemplate = document.querySelector('#success')
+      .content
+      .querySelector('.success').cloneNode(true);
+
+    successContainer.appendChild(successTemplate);
+
+    var onSuccessClose = function (evt) {
+
+      if (evt.type === 'click') {
+        successContainer.removeChild(successTemplate);
+      } else if (evt.type === 'keydown') {
+        if (evt.keyCode === ESC_KEYCODE) {
+          successContainer.removeChild(successTemplate);
+        }
+      }
+      document.removeEventListener('click', onSuccessClose);
+      document.removeEventListener('keydown', onSuccessClose);
+    };
+    document.addEventListener('click', onSuccessClose);
+    document.addEventListener('keydown', onSuccessClose);
+  };
+
   var loadAds = function (cb) {
     window.load(function (data) {
       advertisments = data;
@@ -86,6 +110,8 @@
     // функция заполнения блока DOM-элементами на основе массива JS-объектов.
     addAds: addAds,
     renderAds: renderAds,
-    getAds: getAds
+    getAds: getAds,
+    onError: onError,
+    onSuccess: onSuccess
   };
 })();
