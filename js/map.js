@@ -10,7 +10,7 @@
   var similarListElement = document.querySelector('.map__pins');
   var advertisments = [];
   var renderedAds = [];
-  // функция создания DOM-элемента на основе JS-объекта,
+
   var onError = function () {
     var errorContainer = document.querySelector('main');
     var errorTemplate = document.querySelector('#error')
@@ -33,15 +33,6 @@
     document.addEventListener('click', onErrorClose);
     document.addEventListener('keydown', onErrorClose);
   };
-  var getAdTemplate = function (ad) {
-    var template = adTemplateElement.cloneNode(true);
-    template.querySelector('img').src = ad.author.avatar;
-    template.querySelector('img').alt = ad.offer.title;
-    template.style.top = ad.location.y - PIN_HEIGHT + 'px';
-    template.style.left = ad.location.x - PIN_WIDTH / 2 + 'px';
-    return template;
-  };
-
   var onSuccess = function () {
     var successContainer = document.querySelector('main');
     var successTemplate = document.querySelector('#success')
@@ -64,6 +55,14 @@
     };
     document.addEventListener('click', onSuccessClose);
     document.addEventListener('keydown', onSuccessClose);
+  };
+  var getAdTemplate = function (ad) {
+    var template = adTemplateElement.cloneNode(true);
+    template.querySelector('img').src = ad.author.avatar;
+    template.querySelector('img').alt = ad.offer.title;
+    template.style.top = ad.location.y - PIN_HEIGHT + 'px';
+    template.style.left = ad.location.x - PIN_WIDTH / 2 + 'px';
+    return template;
   };
 
   var loadAds = function (cb) {

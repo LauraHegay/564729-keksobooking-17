@@ -2,6 +2,7 @@
 // модуль, который работает с формой объявления
 
 (function () {
+  var pageActive = false;
   var formFilter = document.querySelector('.map__filters');
   var formAnnoucement = document.querySelector('.ad-form');
   var pin = document.querySelector('.map__pin--main');
@@ -21,10 +22,6 @@
     house: 5000,
     bungalo: 0
   };
-  // var offers = [];
-  // window.load(function (data) {
-  //   offers = data.slice();
-  // });
 
   // функция для изменения состояния (заблокирован или не заблокирован) элементов формы.
   var setElementsCondition = function (elements, conditionElements) {
@@ -88,6 +85,7 @@
       setElementsCondition(selects, true);
       setElementsCondition(selectsFilter, true);
       window.form.setAddres(true);
+      pageActive = false;
     },
     setActiveMode: function () {
       var map = document.querySelector('.map');
@@ -99,7 +97,10 @@
       setElementsCondition(fieldsets, false);
       setElementsCondition(selects, false);
       setElementsCondition(selectsFilter, false);
-      window.map.addAds();
+      if (!pageActive) {
+        window.map.addAds();
+      }
+      pageActive = true;
     }
   };
 
