@@ -49,10 +49,9 @@
   };
 
   var checkFeatures = function (features) {
-    // return features.every(function (item) {
-    //   return filters.features.includes(item);
-    // });
-    return true;
+    return features.every(function (item) {
+      filters.features.includes(item);
+    });
   };
 
   var filter = function (ads) {

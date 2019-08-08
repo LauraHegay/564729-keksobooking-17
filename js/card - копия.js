@@ -1,14 +1,13 @@
 'use strict';
 // функционал заполнения и отображения карточки
 (function () {
-
   var translateOfferType = {
     flat: 'Квартира',
     bungalo: 'Бунгало',
     house: 'Дом',
     palace: 'Дворец'
   };
-  var map = document.querySelector('.map');
+
   var similarCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var getOfferFeatures = function (features, element) {
     var similarListFeatures = document.querySelector('.popup__features');
@@ -66,28 +65,10 @@
     }
     return cardElement;
   };
-  var deleteOpenCard = function () {
-    var mapCard = document.querySelector('.map__card');
-    if (mapCard) {
-      mapCard.remove();
-    }
-  };
-  var cardOpen = function () {
-    var elementOpen = document.querySelector('.map__card');
-    if (elementOpen) {
-      deleteOpenCard();
-    }
-  };
-  var similarListElement = document.querySelector('.map__pins');
-  var showCard = function (pinId, pin, data) {
-    cardOpen();
-    var newCard = createCard(data[pinId]);
-    map.insertBefore(newCard, similarListElement);
-  };
+
   window.card = {
     createCard: createCard,
     showCard: showCard,
-    deleteOpenCard: deleteOpenCard
-    // hideAd: hideAd
+    hideAd: hideAd
   };
 })();

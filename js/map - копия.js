@@ -7,11 +7,10 @@
   var NUMBER_PINS = 5;
   var ESC_KEYCODE = 27;
   var adTemplateElement = document.querySelector('#pin').content.querySelector('.map__pin');
-  var similarListElement = document.querySelector('.map__pins');
+
+  var map = document.querySelector('.map');
   var advertisments = [];
   var renderedAds = [];
-  var pins = [];
-  var currentPin = null;
 
   var onError = function () {
     var errorContainer = document.querySelector('main');
@@ -71,7 +70,7 @@
     window.load(function (data) {
       advertisments = data;
       cb(advertisments);
-      //onPinsClick(advertisments);
+      onPinsClick(advertisments);
     }, onError);
   };
   var removeAds = function (ads) {
@@ -106,44 +105,67 @@
   var getAds = function () {
     return advertisments;
   };
-
-
-  var activatePin = function (pin) {
-    if (currentPin) {
-      currentPin.classList.remove('active');
-    }
-    currentPin = pin;
-    pin.classList.add('active');
-  };
-
-  var isActive = function (pin) {
-    return pin === currentPin;
-  };
-
-  var deactivatePin = function (pin) {
-    if (isActive(pin)) {
-      pin.classList.remove('active');
+  var onKeyDown;
+  var similarListElement = document.querySelector('.map__pins');
+  var deleteOpenCard = function () {
+    var mapCard = document.querySelector('.map__card');
+    if (mapCard) {
+      mapCard.remove();
     }
   };
-
-  var onPinClick = function (evt) {
-    // Уменьшаем число перерисовок
-    if (isActive(pin)) {
-      return;
+  var cardOpen = function () {
+    var elementOpen = document.querySelector('.map__card');
+    if (elementOpen) {
+      deleteOpenCard();
     }
-    var pin = evt.currentTarget;
-    activatePin(pin);
-    var pinData = pin.dataset.index;
-    window.card.showCard(pinData, pin);
   };
-  var getPin = function () {
+  var doCardJob = function (pinId, data) {
+    cardOpen();
+    var newCard = window.card.createCard(data[pinId]);
+    map.insertBefore(newCard, similarListElement);
+  };
+  var onPinsClick = function (data) {
     var pinsList = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < pinsList.length; i++) {
-      pinsList[i].dataset.index = i;
-      pinsList[i].addEventListener('click', onPinClick);
+    for (var j = 0; j < pinsList.length; j++) {
+      pinsList[j].addEventListener('click', function (evt) {
+        var button = evt.currentTarget;
+        var pinId = button.getAttribute('data-id');
+
+        var buttons = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+        buttons.forEach(function (element) {
+          element.classList.remove('map__pin--active');
+        });
+
+        button.classList.add('map__pin--active');
+
+        doCardJob(pinId, data);
+
+        var popupCloseButton = document.querySelector('.popup__close');
+
+        popupCloseButton.addEventListener('click', function () {
+          buttons.forEach(function (element) {
+            element.classList.remove('map__pin--active');
+          });
+
+          deleteOpenCard();
+          document.removeEventListener('keydown', onKeyDown);
+        });
+
+        onKeyDown = function (keyEvt) {
+          buttons.forEach(function (element) {
+            element.classList.remove('map__pin--active');
+          });
+
+          if (document.querySelectorAll('.map__pin:not(.map__pin--main)') && keyEvt.keyCode === ESC_KEYCODE) {
+            deleteOpenCard();
+            document.removeEventListener('keydown', onKeyDown);
+          }
+        };
+
+        document.addEventListener('keydown', onKeyDown);
+      });
     }
   };
-  getPin();
   window.map = {
     addAds: addAds,
     renderAds: renderAds,
