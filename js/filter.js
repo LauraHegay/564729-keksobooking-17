@@ -49,8 +49,9 @@
   };
 
   var checkFeatures = function (features) {
-    return features.every(function (item) {
-      filters.features.includes(item);
+    var checkedFeaturesItems = document.querySelectorAll('input:checked');
+    return Array.from(checkedFeaturesItems).every(function (element) {
+      return features.includes(element.value);
     });
   };
 
